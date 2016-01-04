@@ -21,7 +21,7 @@ class Game
             controller.start()
         console.log LGlobal.width + " " + LGlobal.height
         @backLayer.graphics.drawRect(1, "#000000", [1, 1, 799, 449])
-        @backLayer.addEventListener(LEvent.ENTER_FRAME, @update.bind(@))
+        @backLayer.addEventListener(LEvent.ENTER_FRAME,=> @update())
 
 
     update: ->
