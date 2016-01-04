@@ -20,16 +20,25 @@ class Player
             if floors[1] > floors[0]
                 vel = (floors[1] - floors[0]) - half_gravity
                 duration = 1
-            else
-                vel = - half_gravity * 2
+                willDie = false
+            else if floors[2] > floors[0]
+                vel = -half_gravity * 2
                 duration = 2
+                willDie = true
+            else
+                vel = (floors[2] - floors[0]) / 2 - half_gravity * 2
+                duration = 2
+                willDie = false
         else
             if floors[1] > floors[0]
                 vel = -half_gravity
                 duration = 1
+                willDie = true
             else
                 vel = (floors[1] - floors[0]) - half_gravity
                 duration = 1
+                willDie = false
+
         @y = (vel * t + half_gravity * t * t + floors[0])
 
         if @isPendingJump
@@ -38,6 +47,11 @@ class Player
             else if t > duration - duration_delta
                 @willJump = true
             @isPendingJump = false
+
+        if willDie and @timer >= duration - 0.3 and @y <= floors[duration]
+
+            @listener?.onDie?(@, @curFloorIndex + duration)
+            return
 
         if @timer >= duration
             @timer -= duration

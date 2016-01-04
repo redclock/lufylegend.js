@@ -4,8 +4,8 @@ gameDefines = require '../base/gameDefines'
 class MapView
     constructor: (@model, parentView) ->
         @rootNode = new LSprite()
-        @rootNode.x = gameDefines.PLAYER_X
-        @rootNode.y = gameDefines.FLOOR_BASE
+        @rootNode.x = gameDefines.CENTER_X
+        @rootNode.y = gameDefines.CENTER_Y
         @minIndex = @maxIndex = 0
 
         parentView.addChild(@rootNode)
@@ -27,21 +27,27 @@ class MapView
         for i in [addIndex+1..maxIndex] by 1
             @createPillar(i)
 
-        @rootNode.x = gameDefines.PLAYER_X - (centerX) * WIDTH
+        @rootNode.x = gameDefines.CENTER_X - (centerX) * WIDTH
 
     createPillar: (index)->
         height = -@model.getFloor(index) * gameDefines.FLOOR_HEIGHT
-        WIDTH = gameDefines.FLOOR_WIDTH
+        WIDTH = gameDefines.FLOOR_WIDTH * 0.75
 
         pillarNode = new LSprite()
         pillarNode.floorIndex = index
-        pillarNode.x = index * WIDTH
+        pillarNode.x = index * gameDefines.FLOOR_WIDTH
         pillarNode.y = height
         pillarNode.orgY = height
         @rootNode.addChild(pillarNode)
         shapeNode = new LShape()
         pillarNode.addChild(shapeNode)
-        shapeNode.graphics.drawEllipse(1, "#ff0000", [-WIDTH * 0.375, -5, WIDTH * 0.75, 10])
+
+        shapeNode.graphics.drawEllipse 1, "#000000",
+            [-WIDTH / 2, -5, WIDTH, 10]
+        shapeNode.graphics.drawLine 1, "#000000",
+            [-WIDTH / 2, 0, -WIDTH / 2, 800]
+        shapeNode.graphics.drawLine 1, "#000000",
+            [WIDTH / 2, 0, WIDTH / 2, 800]
         pillarNode
 
     getPillarByIndex: (index) ->
@@ -51,7 +57,7 @@ class MapView
 
     shakePillar: (pillar)->
         LTweenLite
-        .to(pillar, 0.05, {y: pillar.orgY + 3})
+        .to(pillar, 0.05, {y: pillar.orgY + 10})
         .to(pillar, 0.2, {y: pillar.orgY})
 
     onPlayerHitFloor: (index)->

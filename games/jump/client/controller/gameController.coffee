@@ -10,22 +10,26 @@ class GameController
         @player = new Player(
             onHitFloor: (player, index)=>
                 @mapView.onPlayerHitFloor(index)
+            onDie: (player, index)=>
+                @paused = true
         )
         @map = new Map()
 
     start: ->
+        @paused = false
         @mapView = new MapView(@map, @game.backLayer)
         @playerView = new PlayerView(@player, @game.backLayer)
 
-        LGlobal.stage.addEventListener(LKeyboardEvent.KEY_DOWN,
+        LGlobal.stage.addEventListener(LMouseEvent.MOUSE_DOWN,
             (e)=>
-                if e.keyCode == 32
                     @player.tryJump()
         );
 
 
     update: (dt)->
-        deltaTime = dt / gameDefines.JUMP_TIME
+        if @paused
+            return
+        deltaTime = dt / gameDefines.STEP_TIME
         @player.update(deltaTime, @map)
         @playerView.refreshView()
         @mapView.update(@player.getCurrentX())
