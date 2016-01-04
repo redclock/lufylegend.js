@@ -8,11 +8,11 @@ class PlayerView
         parentView.addChild(@rootNode)
 
         @shape = new LShape()
-        @shape.graphics.drawEllipse(0, "#FF0000", [-radius / 2, -radius, radius, radius], true, "#880000");
+        @shape.graphics.drawEllipse(0, "#000000", [-radius / 2, -radius, radius, radius], true, "#008800");
 
         @rootNode.addChild @shape
-        @rootNode.x = gameDefines.CENTER_X
-        @rootNode.y = gameDefines.CENTER_Y
+        @rootNode.x = gameDefines.PLAYER_X
+        @rootNode.y = gameDefines.FLOOR_BASE
         @refreshView()
 
     refreshView: ->
