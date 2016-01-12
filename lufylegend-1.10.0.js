@@ -1540,7 +1540,7 @@ function init (s, c, w, h, f, t) {
 			_f();
 		};
 	}
-	if (t != null && t == LEvent.INIT) {
+	if ((t != null && t == LEvent.INIT) || document.readyState === "complete") {
 		loop();
 	}else{
 		LEvent.addEventListener(window, "load", function () {
